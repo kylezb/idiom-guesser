@@ -51,25 +51,4 @@
     page = browser.new_page()
 ```
 
-> 调用 `python -m auto_py_to_exe` 时，请确保您位于auto_py_to_exe下的目录中（在第3步之后），否则您将需要绝对/相对地将文件夹auto_py_to_exe引用到当前位置。
-## 使用本程序
-1. 选择您的脚本文件的位置（粘贴或使用文件浏览器）
-   - 文件存在时轮廓将变为蓝色
-2. 选择其他选项并添加图标或其他文件之类的内容
-3. 点击底部的蓝色大按钮进行转换
-4. 完成后在目录 /output中找到转换后的文件
 
-*简单！*
-
-
-## 测试
-
-测试文件位于 `tests/` 中，它们被 pytest 运行:
-
-```
-$ pip install pytest
-$ pip install -e .
-$ pytest
-```
-
-## 屏幕截图
