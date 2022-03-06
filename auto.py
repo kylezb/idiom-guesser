@@ -35,6 +35,8 @@ def run(playwright: Playwright) -> None:
         user_data_dir='D:/py/proj/idiom-guesser/userdata',
     )
     page = browser.new_page()
+    # 默认创建2个窗口，关闭第一个空窗口
+    browser.pages[0].close()
 
     # browser = playwright.chromium.launch(headless=False, channel="msedge")
     # context = browser.new_context()
@@ -75,7 +77,7 @@ def run(playwright: Playwright) -> None:
 
             while 1:
                 selector = page.query_selector(f'xpath=//*[@id="app"]/div/div[3]/div[{i}]')
-                print(selector.inner_text())
+                print(len(selector.inner_text()))
                 if len(selector.inner_text()) > 4:
                     break
             selector = page.query_selector(f'xpath=//*[@id="app"]/div/div[3]/div[{i}]')
