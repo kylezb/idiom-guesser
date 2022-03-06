@@ -27,7 +27,7 @@
 |[拼成语](https://allanchain.github.io/chinese-wordle/)|![ex3](./img/ex3.png) | ![ex4](./img/ex4.png) |
 
 ## 更多
-基于[Playwright](https://playwright.dev/) 的自动化~~（无情的）~~猜成语机器
+基于[Playwright](https://playwright.dev/) 的自动化 ~~无情的~~ 猜成语机器
 ![gif1](./img/gif1.gif) 
 使用idiom-guesser基本能在3-4次内猜出成语
 ![ex5](./img/ex5.png) 
