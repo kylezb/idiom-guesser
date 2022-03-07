@@ -7,7 +7,7 @@
   },
   {
    "optionDest": "filenames",
-   "value": "D:/py/proj/wordle/wordle.py"
+   "value": "F:/py/proj/idiom-guesser/guesser.py"
   },
   {
    "optionDest": "onefile",
@@ -19,7 +19,7 @@
   },
   {
    "optionDest": "icon_file",
-   "value": "D:/py/proj/wordle/favicon.ico"
+   "value": "F:/py/proj/idiom-guesser/favicon.ico"
   },
   {
    "optionDest": "ascii",
@@ -67,7 +67,7 @@
   },
   {
    "optionDest": "datas",
-   "value": "D:/py/proj/wordle/idioms.sqlite;."
+   "value": "F:/py/proj/idiom-guesser/idioms.sqlite;."
   }
  ],
  "nonPyinstallerOptions": {

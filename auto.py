@@ -61,7 +61,7 @@ def run(playwright: Playwright) -> None:
 
     while 1:
 
-        word = '络绎不绝'
+        word = '长治久安'
         page.locator("input").fill(word)
         page.locator("text=确认").click()
 
