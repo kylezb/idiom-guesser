@@ -1,5 +1,11 @@
 import os
 import sqlite3
+from time import sleep
+
+import rich
+from rich.console import Console
+from rich.panel import Panel
+
 from idioms2db import start, final, tones
 from idioms2db_strict import start_s, final_s, tones_s
 
@@ -81,11 +87,19 @@ def get_sql(idiom, idiom_list=[], shengmu_list=[], yunmu_list=[], shengdiao_list
 
     if idiom_list:
         for index, item in enumerate(idiom_list):
+            exclude = [1, 2, 3, 4]
             if item == 0:
                 if idiom.count(idiom[index]) == 1:
                     cod.append(f'word not like "%{idiom[index]}%"')
             if item == 1:
                 cod.append(f'w{index + 1} != "{idiom[index]}"')
+                exclude.remove(index + 1)
+                cod2 = []
+                for i in exclude:
+                    cod2.append(f'w{i} = "{idiom[index]}"')
+                a = ' or '.join(cod2)
+                cod.append(f'({a})')
+
             if item == 2:
                 cod.append(f'w{index + 1} = "{idiom[index]}"')
                 if f'w{index + 1} != "{idiom[index]}"' in cod:
@@ -116,67 +130,81 @@ def query(sql, echo=True):
     return idioms
 
 
+def rich_input(msg, lst):
+    while 1:
+        console = Console()
+
+        ctx = console.input(msg).strip()
+        if ctx == '':
+            ctx_list = [0, 0, 0, 0]
+        else:
+            if len(ctx) != 4:
+                continue
+            if not ctx.isdigit():
+                continue
+            ctx_list = ','.join(ctx).strip().split(',')
+            ctx_list = list(map(int, ctx_list))
+        if max(ctx_list) > 2 or min(ctx_list) < 0:
+            continue
+        # refer:https://www.freesion.com/article/7148743579/
+        # refer:https://stackoverflow.com/questions/64388282/overwrite-input-line-on-python
+        print('\033[1A' + '\033[K' + '\033[1A')
+        rich.print(f"[red]{msg}[/red]", end="")
+        colors = ["#9ba0a8", "#de7525", "#1d9c9c", ]  # 颜色分别对应0，1，2
+        string = ''
+        for index, item in enumerate(ctx_list):
+            sleep(0.1)
+            string = string + f" [{colors[item]}]{lst[index]}[/{colors[item]}]"
+            length = 5 - len(str(lst[index]))
+            if '\u4e00' <= str(lst[index]) <= '\u9fff':  # 汉字占2单位宽度
+                length = 4 - len(str(lst[index]))
+            console.print(f" [{colors[item]}]{lst[index]}[/{colors[item]}]" + ' ' * length, end="", )
+        rich.print("\r")
+        return ctx_list
+
+
 def wordle(strict=True):
     condition = []
     idiom_list = []
     shengdiao_list = []
 
-    print('帮助：(0:不存在  1:存在，位置不对  2:存在，位置正确)   例如：1201 默认：0000')
-    print('推荐开局：长治久安|一目了然|无可厚非|取而代之|排忧解难|举足轻重|统筹兼顾|热火朝天|顺理成章|死灰复燃|大江南北')
+    os.system('cls')
+
+    console = Console()
+    console.print('帮    助：[#9ba0a8]0:不存在[/#9ba0a8] [#de7525]1:存在，位置不对[/#de7525] [#1d9c9c]2:存在，位置正确[/#1d9c9c] ',
+                  '例如:[#9ba0a8]0[/#9ba0a8][#de7525]11[/#de7525][#1d9c9c]2[/#1d9c9c] 默认:[#9ba0a8]0000[/#9ba0a8]')
+    console.print('[#8eaf44]推荐开局：[/#8eaf44][#7b963c]长治久安 一目了然 无可厚非 取而代之 排忧解难 举足轻重 统筹兼顾 热火朝天 顺理成章 死灰复燃 大江南北[/#7b963c]')
+    idioms = []
 
     while 1:
-        idiom = input('成语：(在此输入四字成语继续，输入q重新开始)：')
+        idiom = input('成    语：(输入成语继续，默认选择备选第一个，输入q重新开始)：')
+        if idiom == '':
+            if len(idioms) < 1:
+                continue
+            idiom = idioms[0][0]
         if idiom == 'q':
             os.system('cls')
             return wordle()
         if len(idiom) != 4:
             continue
-        # print(idiom, py2_s(idiom))
 
-        b = input('声母情况:')
-        if b.strip() != '':
-            shengmu_list = ','.join(b).strip().split(',')
-            shengmu_list = list(map(int, shengmu_list))
-            if max(shengmu_list) > 2 or min(shengmu_list) < 0:
-                continue
-            if len(shengmu_list) != 4:
-                continue
+        if strict:
+            shengmu = start_s(idiom)
+            yunmu = final_s(idiom)
+            shengdiao = tones_s(idiom)
         else:
-            shengmu_list = [0, 0, 0, 0]
+            shengmu = start(idiom)
+            yunmu = final(idiom)
+            shengdiao = tones(idiom)
+        print('\033[1A' + '\033[K' + '\033[1A')
+        rich.print(f'[#f92b77]成    语：{idiom}[/#f92b77]')
 
-        c = input('韵母情况:')
-        if c.strip() != '':
-            yunmu_list = ','.join(c).strip().split(',')
-            yunmu_list = list(map(int, yunmu_list))
-            if max(yunmu_list) > 2 or min(yunmu_list) < 0:
-                continue
-            if len(yunmu_list) != 4:
-                continue
-        else:
-            yunmu_list = [0, 0, 0, 0]
-        if not strict:
-            a = input('成语情况:')
-            if a.strip() != '':
-                idiom_list = ','.join(a).strip().split(',')
-                idiom_list = list(map(int, idiom_list))
-                if max(idiom_list) > 2 or min(idiom_list) < 0:
-                    continue
-                if len(idiom_list) != 4:
-                    continue
-            else:
-                idiom_list = [0, 0, 0, 0]
-        if not strict:
+        shengmu_list = rich_input('声母情况:', shengmu)
+        yunmu_list = rich_input('韵母情况:', yunmu)
 
-            d = input('声调情况:')
-            if d.strip() != '':
-                shengdiao_list = ','.join(d).strip().split(',')
-                shengdiao_list = list(map(int, shengdiao_list))
-                if max(shengdiao_list) > 2 or min(shengdiao_list) < 0:
-                    continue
-                if len(shengdiao_list) != 4:
-                    continue
-            else:
-                shengdiao_list = []
+        if not strict:
+            shengdiao_list = rich_input('声调情况:', shengdiao)
+            idiom_list = rich_input('成语情况:', idiom)
 
         cod = get_sql(idiom=idiom, idiom_list=idiom_list, shengmu_list=shengmu_list, yunmu_list=yunmu_list,
                       shengdiao_list=shengdiao_list, strict=strict)
@@ -187,7 +215,9 @@ def wordle(strict=True):
             sql = 'select word,freq from IDIOM where ' + str(' and '.join(condition)) + ' ORDER BY freq desc '
 
         idioms = query(sql, echo=False)
-        print(f'匹配数量：{len(idioms)} 条', ' '.join(str(i[0]) for i in idioms[:20]))
+        # rich.print(f'匹配数量：{len(idioms)} 条',' '.join(str(i[0]) for i in idioms[:20]))
+        rich.print(f'[#8eaf44]匹配数量：{len(idioms)} 条[/#8eaf44]\n'
+                   f'[#8eaf44]备选成语：[/#8eaf44][#7b963c]{" ".join(str(i[0]) for i in idioms[:20])} [/#7b963c]')
 
 
 if __name__ == '__main__':
@@ -197,7 +227,18 @@ if __name__ == '__main__':
     2:存在，位置正确
     """
     try:
-        print('选择版本：\n1-->汉兜(https://handle.antfu.me/)  2-->拼成语(https://allanchain.github.io/chinese-wordle/)')
+        os.system('cls')
+        idiom_guesser = '''
+          ___     _  _                                                 
+         |_ _| __| |(_) ___  _ __    __ _  _  _  ___  ___ ___ ___  _ _ 
+          | | / _` || |/ _ \| '  \  / _` || || |/ -_)(_-<(_-</ -_)| '_|
+         |___|\__,_||_|\___/|_|_|_| \__, | \_,_|\___|/__//__/\___||_|  
+                                    |___/                              
+                                    '''
+        p = '选择版本：\n1-->汉兜(https://handle.antfu.me/)  \n2-->拼成语(https://allanchain.github.io/chinese-wordle/)'
+        rich.print(Panel(idiom_guesser, title="Idiom", subtitle="Guesser"))
+        rich.print(Panel(p))
+
         a = input('请选择合适的版本，否则将难以得到准确答案:')
         if int(a) == 1:
             wordle(strict=False)
