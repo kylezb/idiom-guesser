@@ -98,7 +98,10 @@ def start(word):
             start.append(p[0])
         else:
             a = pinyin(word.strip()[i], style=Style.FIRST_LETTER, strict=False)
-            start.append(a[0][0])
+            if a[0][0] in ['e', 'a']:
+                start.append('Ø')
+            else:
+                start.append(a[0][0])
     return start
 
 
