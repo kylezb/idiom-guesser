@@ -171,13 +171,13 @@ def wordle(strict=True):
     os.system('cls')
 
     console = Console()
-    console.print('帮    助：[#9ba0a8]0:不存在[/#9ba0a8] [#de7525]1:存在，位置不对[/#de7525] [#1d9c9c]2:存在，位置正确[/#1d9c9c] ',
+    console.print('帮    助: [#9ba0a8]0:不存在[/#9ba0a8] [#de7525]1:存在，位置不对[/#de7525] [#1d9c9c]2:存在，位置正确[/#1d9c9c] ',
                   '例如:[#9ba0a8]0[/#9ba0a8][#de7525]11[/#de7525][#1d9c9c]2[/#1d9c9c] 默认:[#9ba0a8]0000[/#9ba0a8]')
-    console.print('[#8eaf44]推荐开局：[/#8eaf44][#7b963c]长治久安 一目了然 无可厚非 取而代之 排忧解难 举足轻重 统筹兼顾 热火朝天 顺理成章 死灰复燃 大江南北[/#7b963c]')
+    console.print('[#8eaf44]推荐开局: [/#8eaf44][#7b963c]长治久安 一目了然 无可厚非 取而代之 排忧解难 举足轻重 统筹兼顾 热火朝天 顺理成章 死灰复燃 大江南北[/#7b963c]')
     idioms = []
 
     while 1:
-        idiom = input('成    语：(输入成语继续，默认选择备选第一个，输入q重新开始)：')
+        idiom = input('成    语: (输入成语继续，默认选择备选第一个，输入q重新开始): ')
         if idiom == '':
             if len(idioms) < 1:
                 continue
@@ -197,7 +197,7 @@ def wordle(strict=True):
             yunmu = final(idiom)
             shengdiao = tones(idiom)
         print('\033[1A' + '\033[K' + '\033[1A')
-        rich.print(f'[#f92b77]成    语：{idiom}[/#f92b77]')
+        rich.print(f'[#f92b77]成    语: {idiom}[/#f92b77]')
 
         shengmu_list = rich_input('声母情况:', shengmu)
         yunmu_list = rich_input('韵母情况:', yunmu)
@@ -215,9 +215,9 @@ def wordle(strict=True):
             sql = 'select word,freq from IDIOM where ' + str(' and '.join(condition)) + ' ORDER BY freq desc '
 
         idioms = query(sql, echo=False)
-        # rich.print(f'匹配数量：{len(idioms)} 条',' '.join(str(i[0]) for i in idioms[:20]))
-        rich.print(f'[#8eaf44]匹配数量：{len(idioms)} 条[/#8eaf44]\n'
-                   f'[#8eaf44]备选成语：[/#8eaf44][#7b963c]{" ".join(str(i[0]) for i in idioms[:20])} [/#7b963c]')
+        # rich.print(f'匹配数量: {len(idioms)} 条',' '.join(str(i[0]) for i in idioms[:20]))
+        rich.print(f'[#8eaf44]匹配数量: {len(idioms)} 条[/#8eaf44]\n'
+                   f'[#8eaf44]备选成语: [/#8eaf44][#7b963c]{" ".join(str(i[0]) for i in idioms[:20])} [/#7b963c]')
 
 
 if __name__ == '__main__':
@@ -235,7 +235,7 @@ if __name__ == '__main__':
          |___|\__,_||_|\___/|_|_|_| \__, | \_,_|\___|/__//__/\___||_|  
                                     |___/                              
                                     '''
-        p = '选择版本：\n1-->汉兜(https://handle.antfu.me/)  \n2-->拼成语(https://allanchain.github.io/chinese-wordle/)'
+        p = '选择版本: \n1-->汉兜(https://handle.antfu.me/)  \n2-->拼成语(https://allanchain.github.io/chinese-wordle/)'
         rich.print(Panel(idiom_guesser, title="Idiom", subtitle="Guesser"))
         rich.print(Panel(p))
 

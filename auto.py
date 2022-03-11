@@ -1,4 +1,7 @@
+import os
+
 from playwright.sync_api import Playwright, sync_playwright
+
 from guesser import get_sql, query
 
 
@@ -28,11 +31,12 @@ def get_num_from_color(text):
 
 
 def run(playwright: Playwright) -> None:
+    current_dir = os.path.dirname(os.path.abspath(__file__))
     browser = playwright.chromium.launch_persistent_context(
         headless=False,
         channel="msedge",
         # 换成自己的用户目录,
-        user_data_dir='D:/py/proj/idiom-guesser/userdata',
+        user_data_dir=os.path.join(current_dir, 'userdata'),
     )
     page = browser.new_page()
     # 默认创建2个窗口，关闭第一个空窗口
