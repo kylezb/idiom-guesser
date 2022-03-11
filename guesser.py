@@ -10,7 +10,15 @@ from idioms2db import start, final, tones
 from idioms2db_strict import start_s, final_s, tones_s
 
 
-def get_sql(idiom, idiom_list=[], shengmu_list=[], yunmu_list=[], shengdiao_list=[], strict=True):
+def get_sql(idiom, idiom_list=None, shengmu_list=None, yunmu_list=None, shengdiao_list=None, strict=True):
+    if shengdiao_list is None:
+        shengdiao_list = []
+    if yunmu_list is None:
+        yunmu_list = []
+    if shengmu_list is None:
+        shengmu_list = []
+    if idiom_list is None:
+        idiom_list = []
     if strict:
         shengmu = start_s(idiom)
         yunmu = final_s(idiom)
