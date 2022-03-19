@@ -243,7 +243,8 @@ if __name__ == '__main__':
          |___|\__,_||_|\___/|_|_|_| \__, | \_,_|\___|/__//__/\___||_|  
                                     |___/                              
                                     '''
-        p = '选择版本: \n1-->汉兜(https://handle.antfu.me/)  \n2-->拼成语(https://allanchain.github.io/chinese-wordle/)'
+        p = '选择版本: \n1-->汉兜(https://handle.antfu.me/)  \n2-->拼成语(https://allanchain.github.io/chinese-wordle/)\n' \
+            '项目地址:\nGitee:https://gitee.com/kylezb/idiom-guesser \tGithub:https://github.com/kylezb/idiom-guesser'
         rich.print(Panel(idiom_guesser, title="Idiom", subtitle="Guesser"))
         rich.print(Panel(p))
 
