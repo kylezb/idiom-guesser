@@ -192,7 +192,7 @@ def wordle(strict=True):
             idiom = idioms[0][0]
         if idiom == 'q':
             os.system('cls')
-            return wordle()
+            return wordle(strict)
         if len(idiom) != 4:
             continue
 
