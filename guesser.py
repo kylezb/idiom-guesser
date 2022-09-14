@@ -90,8 +90,8 @@ def get_sql(idiom, idiom_list=None, shengmu_list=None, yunmu_list=None, shengdia
                 cod.append(f'({a})')
             if item == 2:
                 cod.append(f'f{index + 1} = "{yunmu[index]}"')
-                if f'f{index + 1} != "{yunmu[index]}"' in cod:
-                    cod.remove(f'f{index + 1} != "{yunmu[index]}"')
+            if f'f{index + 1} != "{yunmu[index]}"' in cod:
+                cod.remove(f'f{index + 1} != "{yunmu[index]}"')
 
     if idiom_list:
         for index, item in enumerate(idiom_list):
